@@ -1,15 +1,16 @@
 # 实验七 Python面向对象编程
 
-班级： 21计科1
+班级： 21计科04
 
-学号： 202302200000
+学号： B20210302412
 
-姓名： 张三
+姓名： 刘巍
 
-Github地址：<https://github.com/yourusername/python_course>
+Gitee地址：(https://github.com/smile-lv/smile)
 
-CodeWars地址：<https://www.codewars.com/users/yourusername>
+CodeWars地址：<https://www.codewars.com/users/Strugglingtt>
 
+---
 ---
 
 ## 实验目的
@@ -283,44 +284,229 @@ classDiagram
 
 - [第一部分 Python面向对象编程](#第一部分)
 - [第二部分 Codewars Kata挑战](#第二部分)
-- [第三部分 使用Mermaid绘制程序流程图](#第三部分)
-
-注意代码需要使用markdown的代码块格式化，例如Git命令行语句应该使用下面的格式：
-
-![Git命令](/Experiments/img/2023-07-26-22-48.png)
-
-显示效果如下：
-
-```bash
-git init
-git add .
-git status
-git commit -m "first commit"
-```
-
-如果是Python代码，应该使用下面代码块格式，例如：
-
-![Python代码](/Experiments/img/2023-07-26-22-52-20.png)
-
-显示效果如下：
-
+#### 第一题：面向对象的海盗
 ```python
-def add_binary(a,b):
-    return bin(a+b)[2:]
+class Ship:
+    def __init__(self, draft, crew):
+        self.draft = draft
+        self.crew = crew
+    # Your code here
+    def is_worth_it(self):  
+        crew_weight = self.crew *1.5   #船员总重量
+        total_weight = self.draft # 船的吃水深度  
+        return total_weight-crew_weight>20  # 如果去除船员的重量之后，船的吃水深度超过20，那么这艘船值得掠夺
 ```
+![Alt text](image-1.png)
+#### 第二题： 搭建积木
+```python 
+class Block:  
+    def __init__(self, dimensions):  
+        self.width = dimensions[0]  
+        self.length = dimensions[1]  
+        self.height = dimensions[2]  
+  
+    def get_width(self):  
+        return self.width  
+  
+    def get_length(self):  
+        return self.length  
+  
+    def get_height(self):  
+        return self.height  
+  
+    def get_volume(self):  
+        return self.width * self.length * self.height  
+  
+    def get_surface_area(self):  
+        return 2 * (self.width * self.length + self.width * self.height + self.length * self.height)
+```
+![Alt text](image-2.png)
+#### 第三题： 分页助手
+```python
+class PaginationHelper:  
+      
+    def __init__(self, collection, items_per_page):  
+        self.collection = collection  
+        self.items_per_page = items_per_page  
+      
+    def item_count(self):  
+        return len(self.collection)  
+      
+    def page_count(self):  
+        return -(-len(self.collection) // self.items_per_page)  # Equivalent to math.ceil(len(self.collection) / self.items_per_page)  
+      
+    def page_item_count(self, page_index):  
+        if page_index >= 0 and page_index < self.page_count():  
+            return len(self.collection[page_index * self.items_per_page:(page_index + 1) * self.items_per_page])  
+        return -1  
+      
+    def page_index(self, item_index):  
+        if 0 <= item_index < len(self.collection):  
+            return item_index // self.items_per_page  
+        return -1
+```
+![Alt text](image-3.png)
+#### 第四题： 向量（Vector）类
+```python
+import operator
 
-代码运行结果的文本可以直接粘贴在这里。
+class Vector(list):
+  def __str__(self):
+    return "".join(str(tuple(self)).split())
 
-**注意：不要使用截图，Markdown文档转换为Pdf格式后，截图可能会无法显示。**
+  def math(self, other, op):
+    result = Vector()
+    for i in range(max([len(self), len(other)])):
+      result.append(op(self[i], other[i]))
+    return result
+
+  def add(self, other):
+    return self.math(other, operator.add)
+    
+  def subtract(self, other):
+    return self.math(other, operator.sub)
+    
+  def dot(self, other):
+    return sum(self.math(other, operator.mul))
+    
+  def norm(self):
+    return self.dot(self) ** 0.5
+    
+  def equals(self, other):
+    return self == other
+```
+![Alt text](image-4.png)
+#### 第五题： Codewars风格的等级系统
+```python
+class User:  
+    def __init__(self):  
+        self.rank = -8  
+        self.progress = 0  
+        self.pros = [1, 3, 10]  
+  
+    def inc_progress(self, rank):  
+        if (rank>8 or rank<-8 or rank==0):  
+            raise ValueError("Invalid rank")  
+          
+        if rank > 0:  
+            rank -= 1  
+        temp = self.rank  
+        if temp > 0:  
+            temp -= 1  
+        if rank < temp - 1:  
+            return  
+  
+        dis = rank - temp + 1  
+        d = 1  
+        if dis > 1:  
+            d = dis - 1  
+            dis = 2  
+  
+        self.progress += self.pros[dis] * d * d  
+  
+        if self.progress >= 100:  
+            pos = temp + self.progress // 100  
+            if pos>7:
+                temp=7
+            else:
+                temp=pos
+            if temp >= 0:  
+                self.rank = temp + 1
+            else:
+                self.rank=temp
+        if self.rank == 8:  
+            self.progress = 0  
+        else:  
+            self.progress %= 100
+```
+![Alt text](image-5.png)
+- [第三部分 使用Mermaid绘制程序流程图](#第三部分)
+#### 第一题：面向对象的海盗
+```mermaid
+flowchart LR
+   A[开始] --->B{计算crew_weight = self.crew *1.5 #船员重量的吃水深度
+   total_weight = self.draft # 船的吃水深度 }
+   B --> C{ total_weight-crew_weight>20？} 
+   C -->|True| D[TURE]
+   C-->|FALSE| E[FALSE]
+   
+```
 
 ## 实验考查
 
 请使用自己的语言并使用尽量简短代码示例回答下面的问题，这些问题将在实验检查时用于提问和答辩以及实际的操作。
 
 1. Python的类中__init__方法起什么作用？
+   
+   在Python中，__init__方法是一个特殊的方法，通常用于类的初始化。当你创建一个类的实例
+   __init__方法会被自动调用，以便对新创建的对象进行必要的初始化。
+具体来说，__init__方法允许类接受初始参数，这样你就可以在创建对象时设置属性
+
 2. Python语言中如何继承父类和改写（override）父类的方法。
+
+ 在Python中，继承是面向对象编程的一个核心概念。它允许我们在已有的类（父类或基类）的基础上创建新的类（子类）。子类继承了父类的所有属性和方法，同时还可以添加自己的属性和方法。
+
+改写父类的方法通常是为了在子类中根据需要改变或扩展父类方法的行为。
+
+以下是一个简单的示例来说明如何在Python中继承父类和改写父类的方法：
+```python
+python
+# 定义一个父类  
+class Animal:  
+    def __init__(self, name):  
+        self.name = name  
+  
+    def speak(self):  
+        print(f"{self.name} makes a noise")  
+  
+# 定义一个子类 Dog，继承自 Animal  
+class Dog(Animal):  
+    def __init__(self, name):  
+        super().__init__(name)  # 调用父类的构造函数  
+  
+    # 改写父类的 speak 方法  
+    def speak(self):  
+        print(f"{self.name} barks")  
+  
+# 创建一个 Dog 实例并调用它的 speak 方法  
+dog = Dog("Fido")  
+dog.speak()  # 输出 "Fido barks"
+```
 3. Python类有那些特殊的方法？它们的作用是什么？请举三个例子并编写简单的代码说明。
 
-## 实验总结
+Python类中有很多特殊的方法，这些方法以双下划线开头和结尾，例如__init__, __str__, __del__等。这些特殊方法在Python中被称为"魔法方法"或者"双下划线方法"。它们可以改变类的行为或者提供类的接口。以下举三个例子：
 
-总结一下这次实验你学习和使用到的知识，例如：编程工具的使用、数据结构、程序语言的语法、算法、编程技巧、编程思想。
+__init__: 这是一个构造器方法，当一个对象被创建时，这个方法会被自动调用。它可以用来初始化对象的属性。
+
+python
+class MyClass:  
+    def __init__(self, name):  
+        self.name = name  
+  
+obj = MyClass('John')  
+print(obj.name)  # 输出: John
+__str__: 这个方法在调用print函数或者使用str()函数时会被调用，返回一个对象的可打印字符串表示。
+
+python
+class MyClass:  
+    def __init__(self, name):  
+        self.name = name  
+    def __str__(self):  
+        return f'My name is {self.name}'  
+  
+obj = MyClass('John')  
+print(obj)  # 输出: My name is John
+__del__: 当一个对象被销毁时，这个方法会被调用。通常这个方法用来清理资源，例如关闭文件或者网络连接等。但是请注意，Python的垃圾收集机制并不能保证__del__方法一定会被调用，所以不应该过度依赖这个方法。
+
+python
+class MyClass:  
+    def __init__(self, name):  
+        self.name = name  
+    def __del__(self):  
+        print(f'{self.name} is deleted')  
+  
+obj = MyClass('John')  
+del obj  # 输出: John is deleted
+以上就是三个特殊的Python类方法的例子和简单的说明。其他的特殊方法还有很多，例如__getitem__, __setitem__, __call__等等，可以根据实际需要使用。
+## 实验总结
+此次实验是最后依次实验，实验的难度不高，但是对类的编写的熟悉程度要求熟练，还有对题目的阅读能力的要求较为高。
